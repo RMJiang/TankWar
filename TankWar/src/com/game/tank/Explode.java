@@ -1,12 +1,15 @@
 package com.game.tank;
 
+import java.awt.Color;
 import java.awt.Graphics;
+
+import com.game.tank.abstractfactory.BaseExplode;
 
 /**
  * @author ruomengjiang
  * @date 2022年1月15日
  */
-public class Explode {
+public class Explode extends BaseExplode{
 	public static int WIDTH = ResourceManager.explodes[0].getWidth();
 	public static int HEIGHT = ResourceManager.explodes[0].getHeight();
 	
@@ -30,6 +33,7 @@ public class Explode {
 	 * @param g
 	 */
 	public void paint(Graphics g) {
+
 		g.drawImage(ResourceManager.explodes[step++], x, y, null);
 		if(step>=ResourceManager.explodes.length) {
 			tf.explodes.remove(this);

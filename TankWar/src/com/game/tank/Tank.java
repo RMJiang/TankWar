@@ -3,17 +3,20 @@ package com.game.tank;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
+
+import com.game.tank.abstractfactory.BaseTank;
 
 /**
  * @author ruomengjiang
  * @date 2022年1月15日
  */
-public class Tank {
+public class Tank extends BaseTank{
 	//x y坐标
-	private int x,y;
+	int x,y;
 	//方向
-	private Dir dir = Dir.DOWN;
+	Dir dir = Dir.DOWN;
 	//速度
 	private static final int SPEED = 5;
 	//静止
@@ -23,14 +26,16 @@ public class Tank {
 	//随机数
 	private Random random = new Random();
 	//阵营
-	private Group group = Group.BAD;
+	Group group = Group.BAD;
 	
 	Rectangle rect = new Rectangle();
 	
 	public static int WIDTH = ResourceManager.goodTankU.getWidth();
 	public static int HEIGHT = ResourceManager.goodTankU.getHeight();
 	
-	private TankFrame tf = null;
+	TankFrame tf = null;
+	
+	FireStrategy fs;
 	
 	public int getX() {
 		return x;
@@ -84,6 +89,20 @@ public class Tank {
 		rect.y = this.y;
 		rect.width = WIDTH;
 		rect.height = HEIGHT;
+		
+		if(group == Group.GOOD) {
+			String goodFSName = (String)PropertyManager.get("goodFS");
+			
+			try {
+				fs=(FireStrategy)Class.forName(goodFSName).getDeclaredConstructor().newInstance();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+			
+		}
+		else {
+			fs = new DefaultFireStrategy();
+		}
 	}
 	
 	/**
@@ -95,8 +114,6 @@ public class Tank {
 		if(!living) {
 			tf.tanks.remove(this);
 		}
-		
-		
 		
 		switch (dir) {
 			case LEFT:
@@ -186,9 +203,7 @@ public class Tank {
 	 * 开火 打出bullets
 	 */
 	public void fire() {
-		int bX = this.x + Tank.WIDTH/2 - Bullet.WIDTH/2;
-		int bY = this.y + Tank.HEIGHT/2 - Bullet.HEIGHT/2;
-		tf.bullets.add(new Bullet(bX, bY, this.dir, this.group, this.tf));
+		fs.fire(this);
 	}
 
 	/**

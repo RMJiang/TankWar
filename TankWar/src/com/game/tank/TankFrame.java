@@ -11,6 +11,13 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.game.tank.abstractfactory.BaseBullet;
+import com.game.tank.abstractfactory.BaseExplode;
+import com.game.tank.abstractfactory.BaseTank;
+import com.game.tank.abstractfactory.DefaultFactory;
+import com.game.tank.abstractfactory.GameFactory;
+import com.game.tank.abstractfactory.RectFactory;
+
 /**
  * @author ruomengjiang
  * @date 2022年1月13日
@@ -18,11 +25,13 @@ import java.util.List;
 public class TankFrame extends Frame{
 
 	Tank myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD, this);
-	List<Bullet> bullets = new ArrayList<>();
-	List<Tank> tanks = new ArrayList<>();
-	List<Explode> explodes = new ArrayList<>();
+	public List<BaseBullet> bullets = new ArrayList<>();
+	public List<Tank> tanks = new ArrayList<>();
+	public List<BaseExplode> explodes = new ArrayList<>();
 	
-	static final int GAME_WIDTH = 1080, GAME_HEIGHT = 960;
+	public GameFactory gf= new DefaultFactory();
+	
+	public static final int GAME_WIDTH = 1080, GAME_HEIGHT = 960;
 	
 	public TankFrame() {
 		//设置窗口大小

@@ -4,11 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+import com.game.tank.abstractfactory.BaseBullet;
+import com.game.tank.abstractfactory.BaseTank;
+
 /**
  * @author ruomengjiang
  * @date 2022年1月15日
  */
-public class Bullet {
+public class Bullet extends BaseBullet{
 	private static final int SPEED = 10;
 	
 	public static int WIDTH = ResourceManager.bulletD.getWidth();
@@ -36,6 +39,8 @@ public class Bullet {
 		rect.y = this.y;
 		rect.width = WIDTH;
 		rect.height = HEIGHT;
+		
+		tf.bullets.add(this);
 	}
 	
 	/**
@@ -99,7 +104,7 @@ public class Bullet {
 	 * bullet与tank相撞
 	 * @param tank
 	 */
-	public void collideWith(Tank tank) {
+	public void collideWith(BaseTank tank) {
 		if (this.group == tank.getGroup()) {
 			return;
 		} 
@@ -111,7 +116,7 @@ public class Bullet {
 			this.die();
 			int eX = tank.getX() + Tank.WIDTH/2 - Explode.WIDTH/2;
 			int eY = tank.getY() + Tank.HEIGHT/2 - Explode.HEIGHT/2;
-			tf.explodes.add(new Explode(eX,eY,tf));
+			tf.explodes.add(tf.gf.createExplode(eX, eY, tf));
 		}
 	}
 
@@ -121,6 +126,7 @@ public class Bullet {
 	private void die() {
 		this.living = false;
 	}
+
 	
 	
 	
